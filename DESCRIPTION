@@ -1,0 +1,20 @@
+Package: extODAL
+Title: Package 
+Version: 1.0-0
+Date: 2021-05-02
+Authors@R: 
+    person(given = "Jiayi",
+           family = "Tong",
+           role = c("aut", "cre"),
+           email = "Jiayi.Tong@pennmedicine.upenn.edu")
+Description: This is a package for the replication and extension of the existing ODAL algorithm.
+License: Artistic-2.0
+Imports: matlib, survival, parallel, stats
+Encoding: UTF-8
+Depends: R (>= 3.1.0)
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
