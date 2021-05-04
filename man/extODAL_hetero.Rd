@@ -11,9 +11,9 @@ extODAL_hetero(Nsim, setting, parallel_run = FALSE, plotit = FALSE)
 
 \item{setting}{setting of the extended ODAL simulation, ("1" or "2")}
 
-\item{parallel_run}{if the simulation run in parallel}
+\item{parallel_run}{if the simulation run in parallel (default is "FALSE")}
 
-\item{plotit}{if a plot will be made}
+\item{plotit}{if a plot will be made (default is "FALSE")}
 }
 \value{
 MSE of three methods (Pooled, local, and ODAL)

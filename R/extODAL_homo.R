@@ -2,8 +2,8 @@
 #'
 #' @param Nsim total number of iterations
 #' @param setting setting of the simulation, ("A" or "B")
-#' @param parallel_run if the simulation run in parallel
-#' @param plotit if a plot will be made
+#' @param parallel_run if the simulation run in parallel (default is "FALSE")
+#' @param plotit if a plot will be made (default is "FALSE")
 #'
 #' @return MSE of three methods (Pooled, local, and ODAL)
 #' @import matlib parallel survival
@@ -220,7 +220,7 @@ extODAL_homo <- function(Nsim, setting,
       }
 
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
-      return(result)
+
 
       if (plotit){
         plot(N_1_list, MSE_result_local,
@@ -239,6 +239,7 @@ extODAL_homo <- function(Nsim, setting,
                                             rgb(255/255,101/255,80/255,0.5)),
                pch=c(15, 17, 19), bty = "n")
       }
+      return(result)
       ##### ------------------------------------ #####
 
     } else if (setting == "B")
@@ -265,7 +266,7 @@ extODAL_homo <- function(Nsim, setting,
         MSE_result_ODAL[i] = mean(apply(matrix(unlist(result_all[3,]), ncol = 5, nrow = Nsim), 2, mean))
       }
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
-      return(result)
+
 
       if (plotit){
         plot(K_1_list, MSE_result_local,
@@ -279,6 +280,7 @@ extODAL_homo <- function(Nsim, setting,
         lines(K_1_list, MSE_result_ODAL, lty = 3,
               type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
       }
+      return(result)
       ##### ------------------------------------ #####
 
     }else{
@@ -327,7 +329,7 @@ extODAL_homo <- function(Nsim, setting,
       }
 
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
-      return(result)
+
 
       if (plotit){
         plot(N_1_list, MSE_result_local,
@@ -346,6 +348,7 @@ extODAL_homo <- function(Nsim, setting,
                                             rgb(255/255,101/255,80/255,0.5)),
                pch=c(15, 17, 19), bty = "n")
       }
+      return(result)
       ##### ------------------------------------ #####
 
     } else if (setting == "B")
@@ -390,7 +393,7 @@ extODAL_homo <- function(Nsim, setting,
       }
 
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
-      return(result)
+
 
       if (plotit){
         plot(K_1_list, MSE_result_local,
@@ -404,6 +407,7 @@ extODAL_homo <- function(Nsim, setting,
         lines(K_1_list, MSE_result_ODAL, lty = 3,
               type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
       }
+      return(result)
       ##### ------------------------------------ #####
 
 

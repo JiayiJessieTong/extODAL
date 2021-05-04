@@ -2,8 +2,8 @@
 #'
 #' @param Nsim total number of iterations
 #' @param setting setting of the extended ODAL simulation, ("1" or "2")
-#' @param parallel_run if the simulation run in parallel
-#' @param plotit if a plot will be made
+#' @param parallel_run if the simulation run in parallel (default is "FALSE")
+#' @param plotit if a plot will be made (default is "FALSE")
 #'
 #' @return MSE of three methods (Pooled, local, and ODAL)
 #' @import matlib parallel survival
@@ -398,7 +398,7 @@ extODAL_hetero <- function(Nsim, setting,
       }
 
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
-      return(result)
+
 
       if (plotit){
         order_index = order(N_1_list)
@@ -418,6 +418,7 @@ extODAL_hetero <- function(Nsim, setting,
                                             rgb(255/255,101/255,80/255,0.5)),
                pch=c(15, 17, 19), bty = "n")
       }
+      return(result)
       ##### ------------------------------------ #####
 
     } else if (setting == "2")
@@ -457,7 +458,7 @@ extODAL_hetero <- function(Nsim, setting,
       }
 
       result = as.data.frame(rbind(Bias_result_pooled, Bias_result_clogit, Bias_result_local, Bias_result_ODAL))
-      return(result)
+
 
       if (plotit){
         plot(N_1_list, Bias_result_local,
@@ -480,6 +481,7 @@ extODAL_hetero <- function(Nsim, setting,
                      rgb(172/255,85/255,255/255,0.5)),
                pch=c(15, 17, 19, 18), bty = "n")
       }
+      return(result)
       ##### ------------------------------------ #####
 
     }else{
@@ -531,7 +533,6 @@ extODAL_hetero <- function(Nsim, setting,
       }
 
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
-      return(result)
 
       if (plotit){
         order_index = order(N_1_list)
@@ -551,6 +552,7 @@ extODAL_hetero <- function(Nsim, setting,
                                             rgb(255/255,101/255,80/255,0.5)),
                pch=c(15, 17, 19), bty = "n")
       }
+      return(result)
 
     } else if (setting == "2")
     {
@@ -594,7 +596,7 @@ extODAL_hetero <- function(Nsim, setting,
 
       result = as.data.frame(rbind(Bias_result_pooled, Bias_result_clogit,
                                    Bias_result_local, Bias_result_ODAL))
-      return(result)
+
 
       if (plotit){
         plot(N_1_list, Bias_result_local,
@@ -617,6 +619,7 @@ extODAL_hetero <- function(Nsim, setting,
                      rgb(172/255,85/255,255/255,0.5)),
                pch=c(15, 17, 19, 18), bty = "n")
       }
+      return(result)
       ##### ------------------------------------ #####
 
 
