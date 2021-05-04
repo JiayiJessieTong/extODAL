@@ -3,6 +3,7 @@
 #' @param Nsim total number of iterations
 #' @param setting setting of the extended ODAL simulation, ("1" or "2")
 #' @param parallel_run if the simulation run in parallel
+#' @param plotit if a plot will be made
 #'
 #' @return MSE of three methods (Pooled, local, and ODAL)
 #' @import matlib parallel survival
@@ -12,7 +13,8 @@
 #' @export
 
 extODAL_hetero <- function(Nsim, setting,
-                         parallel_run = FALSE){
+                           parallel_run = FALSE,
+                           plotit = FALSE){
   set.seed(4321)
   beta_true = c(-1,1,-1,1,-1)
 
@@ -398,22 +400,24 @@ extODAL_hetero <- function(Nsim, setting,
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
       return(result)
 
-      # order_index = order(N_1_list)
-      # plot(N_1_list[order_index], MSE_result_local[order_index],
-      #      type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-      #      xlab="Total number of patients across 10 sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
-      #      xaxt='n', main = "Extension 1: 10 sites with different sizes")
-      # axis(side = 1,at =N_1_list[order_index],
-      #      labels=N_1_list[order_index],lwd.ticks = TRUE)
-      # lines(N_1_list[order_index], MSE_result_pooled[order_index], lty = 2,
-      #       type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
-      # lines(N_1_list[order_index], MSE_result_ODAL[order_index], lty = 3,
-      #       type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
-      # legend(6000, max(MSE_result_local), legend = c("Local", "Pooled", "ODAL"),
-      #        lwd=2, lty = c(1,2,3), col=c(rgb(26/255,133/255,172/255,0.5),
-      #                                     rgb(26/255,133/255,0/255,0.5),
-      #                                     rgb(255/255,101/255,80/255,0.5)),
-      #        pch=c(15, 17, 19), bty = "n")
+      if (plotit){
+        order_index = order(N_1_list)
+        plot(N_1_list[order_index], MSE_result_local[order_index],
+             type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
+             xlab="Total number of patients across 10 sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
+             xaxt='n', main = "Extension 1: 10 sites with different sizes")
+        axis(side = 1,at =N_1_list[order_index],
+             labels=N_1_list[order_index],lwd.ticks = TRUE)
+        lines(N_1_list[order_index], MSE_result_pooled[order_index], lty = 2,
+              type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
+        lines(N_1_list[order_index], MSE_result_ODAL[order_index], lty = 3,
+              type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+        legend(6000, max(MSE_result_local), legend = c("Local", "Pooled", "ODAL"),
+               lwd=2, lty = c(1,2,3), col=c(rgb(26/255,133/255,172/255,0.5),
+                                            rgb(26/255,133/255,0/255,0.5),
+                                            rgb(255/255,101/255,80/255,0.5)),
+               pch=c(15, 17, 19), bty = "n")
+      }
       ##### ------------------------------------ #####
 
     } else if (setting == "2")
@@ -442,9 +446,9 @@ extODAL_hetero <- function(Nsim, setting,
       for (i in 1:length(N_1_list)){
         result_all = replicate(n = Nsim,
                                main_run_once_hetero(N = N_1_list[i],
-                                             beta_true = beta_true,
-                                             K = K_1,
-                                             n = n_1_list[i]))
+                                                    beta_true = beta_true,
+                                                    K = K_1,
+                                                    n = n_1_list[i]))
         # result for Nsim iteration
         Bias_result_pooled[i] = mean(apply(matrix(unlist(result_all[1,]), ncol = 5, nrow = Nsim), 2, mean))
         Bias_result_clogit[i] = mean(apply(matrix(unlist(result_all[2,]), ncol = 4, nrow = Nsim), 2, mean))
@@ -455,25 +459,27 @@ extODAL_hetero <- function(Nsim, setting,
       result = as.data.frame(rbind(Bias_result_pooled, Bias_result_clogit, Bias_result_local, Bias_result_ODAL))
       return(result)
 
-      # plot(N_1_list, Bias_result_local,
-      #      type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-      #      xlab="Total number of patients across 10 sites", ylab="Bias", ylim = c(0, max(Bias_result_pooled)),
-      #      xaxt='n', main = "Extension B: heterogenous prevalence across fixed K sites")
-      # axis(side = 1,at =N_1_list,
-      #      labels=N_1_list,lwd.ticks = TRUE)
-      # lines(N_1_list, Bias_result_pooled, lty = 2,
-      #       type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
-      # lines(N_1_list, Bias_result_ODAL, lty = 3,
-      #       type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
-      # lines(N_1_list, Bias_result_clogit, lty = 4,
-      #       type="b", col=rgb(172/255,85/255,255/255,0.5), lwd=2, pch=18)
-      # legend(7000, max(Bias_result_pooled), legend = c("Local", "Pooled","ODAL","clogit"),
-      #        lwd=2, lty = c(1,2,3,4),
-      #        col=c(rgb(26/255,133/255,172/255,0.5),
-      #              rgb(26/255,133/255,0/255,0.5),
-      #              rgb(255/255,101/255,80/255,0.5),
-      #              rgb(172/255,85/255,255/255,0.5)),
-      #        pch=c(15, 17, 19, 18), bty = "n")
+      if (plotit){
+        plot(N_1_list, Bias_result_local,
+             type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
+             xlab="Total number of patients across 10 sites", ylab="Bias", ylim = c(0, max(Bias_result_pooled)),
+             xaxt='n', main = "Extension B: heterogenous prevalence across fixed K sites")
+        axis(side = 1,at =N_1_list,
+             labels=N_1_list,lwd.ticks = TRUE)
+        lines(N_1_list, Bias_result_pooled, lty = 2,
+              type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
+        lines(N_1_list, Bias_result_ODAL, lty = 3,
+              type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+        lines(N_1_list, Bias_result_clogit, lty = 4,
+              type="b", col=rgb(172/255,85/255,255/255,0.5), lwd=2, pch=18)
+        legend(7000, max(Bias_result_pooled), legend = c("Local", "Pooled","ODAL","clogit"),
+               lwd=2, lty = c(1,2,3,4),
+               col=c(rgb(26/255,133/255,172/255,0.5),
+                     rgb(26/255,133/255,0/255,0.5),
+                     rgb(255/255,101/255,80/255,0.5),
+                     rgb(172/255,85/255,255/255,0.5)),
+               pch=c(15, 17, 19, 18), bty = "n")
+      }
       ##### ------------------------------------ #####
 
     }else{
@@ -527,22 +533,24 @@ extODAL_hetero <- function(Nsim, setting,
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
       return(result)
 
-      # order_index = order(N_1_list)
-      # plot(N_1_list[order_index], MSE_result_local[order_index],
-      #      type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-      #      xlab="Total number of patients across 10 sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
-      #      xaxt='n', main = "Extension 1: 10 sites with different sizes")
-      # axis(side = 1,at =N_1_list[order_index],
-      #      labels=N_1_list[order_index],lwd.ticks = TRUE)
-      # lines(N_1_list[order_index], MSE_result_pooled[order_index], lty = 2,
-      #       type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
-      # lines(N_1_list[order_index], MSE_result_ODAL[order_index], lty = 3,
-      #       type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
-      # legend(6000, max(MSE_result_local), legend = c("Local", "Pooled", "ODAL"),
-      #        lwd=2, lty = c(1,2,3), col=c(rgb(26/255,133/255,172/255,0.5),
-      #                                     rgb(26/255,133/255,0/255,0.5),
-      #                                     rgb(255/255,101/255,80/255,0.5)),
-      #        pch=c(15, 17, 19), bty = "n")
+      if (plotit){
+        order_index = order(N_1_list)
+        plot(N_1_list[order_index], MSE_result_local[order_index],
+             type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
+             xlab="Total number of patients across 10 sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
+             xaxt='n', main = "Extension 1: 10 sites with different sizes")
+        axis(side = 1,at =N_1_list[order_index],
+             labels=N_1_list[order_index],lwd.ticks = TRUE)
+        lines(N_1_list[order_index], MSE_result_pooled[order_index], lty = 2,
+              type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
+        lines(N_1_list[order_index], MSE_result_ODAL[order_index], lty = 3,
+              type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+        legend(6000, max(MSE_result_local), legend = c("Local", "Pooled", "ODAL"),
+               lwd=2, lty = c(1,2,3), col=c(rgb(26/255,133/255,172/255,0.5),
+                                            rgb(26/255,133/255,0/255,0.5),
+                                            rgb(255/255,101/255,80/255,0.5)),
+               pch=c(15, 17, 19), bty = "n")
+      }
 
     } else if (setting == "2")
     {
@@ -588,25 +596,27 @@ extODAL_hetero <- function(Nsim, setting,
                                    Bias_result_local, Bias_result_ODAL))
       return(result)
 
-      # plot(N_1_list, Bias_result_local,
-      #      type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-      #      xlab="Total number of patients across 10 sites", ylab="Bias", ylim = c(0, max(Bias_result_pooled)),
-      #      xaxt='n', main = "Extension B: heterogenous prevalence across fixed K sites")
-      # axis(side = 1,at =N_1_list,
-      #      labels=N_1_list,lwd.ticks = TRUE)
-      # lines(N_1_list, Bias_result_pooled, lty = 2,
-      #       type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
-      # lines(N_1_list, Bias_result_ODAL, lty = 3,
-      #       type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
-      # lines(N_1_list, Bias_result_clogit, lty = 4,
-      #       type="b", col=rgb(172/255,85/255,255/255,0.5), lwd=2, pch=18)
-      # legend(7000, max(Bias_result_pooled), legend = c("Local", "Pooled","ODAL","clogit"),
-      #        lwd=2, lty = c(1,2,3,4),
-      #        col=c(rgb(26/255,133/255,172/255,0.5),
-      #              rgb(26/255,133/255,0/255,0.5),
-      #              rgb(255/255,101/255,80/255,0.5),
-      #              rgb(172/255,85/255,255/255,0.5)),
-      #        pch=c(15, 17, 19, 18), bty = "n")
+      if (plotit){
+        plot(N_1_list, Bias_result_local,
+             type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
+             xlab="Total number of patients across 10 sites", ylab="Bias", ylim = c(0, max(Bias_result_pooled)),
+             xaxt='n', main = "Extension B: heterogenous prevalence across fixed K sites")
+        axis(side = 1,at =N_1_list,
+             labels=N_1_list,lwd.ticks = TRUE)
+        lines(N_1_list, Bias_result_pooled, lty = 2,
+              type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
+        lines(N_1_list, Bias_result_ODAL, lty = 3,
+              type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+        lines(N_1_list, Bias_result_clogit, lty = 4,
+              type="b", col=rgb(172/255,85/255,255/255,0.5), lwd=2, pch=18)
+        legend(7000, max(Bias_result_pooled), legend = c("Local", "Pooled","ODAL","clogit"),
+               lwd=2, lty = c(1,2,3,4),
+               col=c(rgb(26/255,133/255,172/255,0.5),
+                     rgb(26/255,133/255,0/255,0.5),
+                     rgb(255/255,101/255,80/255,0.5),
+                     rgb(172/255,85/255,255/255,0.5)),
+               pch=c(15, 17, 19, 18), bty = "n")
+      }
       ##### ------------------------------------ #####
 
 

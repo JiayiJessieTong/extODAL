@@ -3,6 +3,7 @@
 #' @param Nsim total number of iterations
 #' @param setting setting of the simulation, ("A" or "B")
 #' @param parallel_run if the simulation run in parallel
+#' @param plotit if a plot will be made
 #'
 #' @return MSE of three methods (Pooled, local, and ODAL)
 #' @import matlib parallel survival
@@ -12,7 +13,8 @@
 #' @export
 
 extODAL_homo <- function(Nsim, setting,
-                         parallel_run = FALSE){
+                         parallel_run = FALSE,
+                         plotit = FALSE){
   set.seed(4321)
   beta_true = c(-1,1,-1,1,-1)
 
@@ -220,21 +222,23 @@ extODAL_homo <- function(Nsim, setting,
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
       return(result)
 
-      # plot(N_1_list, MSE_result_local,
-      #      type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-      #      xlab="Total number of patients across 10 sites", ylab="Mean MSE of four covariates", ylim = c(0, max(MSE_result_local)),
-      #      xaxt='n', main = "Replication A: fixed site number, increasing site size")
-      # axis(side = 1,at =N_1_list,
-      #      labels=N_1_list,lwd.ticks = TRUE)
-      # lines(N_1_list, MSE_result_pooled, lty = 2,
-      #       type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
-      # lines(N_1_list, MSE_result_ODAL, lty = 3,
-      #       type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
-      # legend(6000, max(MSE_result_local), legend = c("Local", "Pooled", "ODAL"),
-      #        lwd=2, lty = c(1,2,3), col=c(rgb(26/255,133/255,172/255,0.5),
-      #                                     rgb(26/255,133/255,0/255,0.5),
-      #                                     rgb(255/255,101/255,80/255,0.5)),
-      #        pch=c(15, 17, 19), bty = "n")
+      if (plotit){
+        plot(N_1_list, MSE_result_local,
+             type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
+             xlab="Total number of patients across 10 sites", ylab="Mean MSE of four covariates", ylim = c(0, max(MSE_result_local)),
+             xaxt='n', main = "Replication A: fixed site number, increasing site size")
+        axis(side = 1,at =N_1_list,
+             labels=N_1_list,lwd.ticks = TRUE)
+        lines(N_1_list, MSE_result_pooled, lty = 2,
+              type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
+        lines(N_1_list, MSE_result_ODAL, lty = 3,
+              type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+        legend(6000, max(MSE_result_local), legend = c("Local", "Pooled", "ODAL"),
+               lwd=2, lty = c(1,2,3), col=c(rgb(26/255,133/255,172/255,0.5),
+                                            rgb(26/255,133/255,0/255,0.5),
+                                            rgb(255/255,101/255,80/255,0.5)),
+               pch=c(15, 17, 19), bty = "n")
+      }
       ##### ------------------------------------ #####
 
     } else if (setting == "B")
@@ -263,16 +267,18 @@ extODAL_homo <- function(Nsim, setting,
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
       return(result)
 
-      # plot(K_1_list, MSE_result_local,
-      #      type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-      #      xlab="Total number of sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
-      #      xaxt='n', main = "Replication B: fixed site size, increasing site number")
-      # axis(side = 1,at =K_1_list,
-      #      labels=K_1_list,lwd.ticks = TRUE)
-      # lines(K_1_list, MSE_result_pooled, lty = 2,
-      #       type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
-      # lines(K_1_list, MSE_result_ODAL, lty = 3,
-      #       type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+      if (plotit){
+        plot(K_1_list, MSE_result_local,
+             type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
+             xlab="Total number of sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
+             xaxt='n', main = "Replication B: fixed site size, increasing site number")
+        axis(side = 1,at =K_1_list,
+             labels=K_1_list,lwd.ticks = TRUE)
+        lines(K_1_list, MSE_result_pooled, lty = 2,
+              type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
+        lines(K_1_list, MSE_result_ODAL, lty = 3,
+              type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+      }
       ##### ------------------------------------ #####
 
     }else{
@@ -323,22 +329,23 @@ extODAL_homo <- function(Nsim, setting,
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
       return(result)
 
-
-      # plot(N_1_list, MSE_result_local,
-      #      type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-      #      xlab="Total number of patients across 10 sites", ylab="Mean MSE of four covariates", ylim = c(0, max(MSE_result_local)),
-      #      xaxt='n', main = "Replication A: fixed site number, increasing site size")
-      # axis(side = 1,at =N_1_list,
-      #      labels=N_1_list,lwd.ticks = TRUE)
-      # lines(N_1_list, MSE_result_pooled, lty = 2,
-      #       type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
-      # lines(N_1_list, MSE_result_ODAL, lty = 3,
-      #       type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
-      # legend(6000, max(MSE_result_local), legend = c("Local", "Pooled", "ODAL"),
-      #        lwd=2, lty = c(1,2,3), col=c(rgb(26/255,133/255,172/255,0.5),
-      #                                     rgb(26/255,133/255,0/255,0.5),
-      #                                     rgb(255/255,101/255,80/255,0.5)),
-      #        pch=c(15, 17, 19), bty = "n")
+      if (plotit){
+        plot(N_1_list, MSE_result_local,
+             type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
+             xlab="Total number of patients across 10 sites", ylab="Mean MSE of four covariates", ylim = c(0, max(MSE_result_local)),
+             xaxt='n', main = "Replication A: fixed site number, increasing site size")
+        axis(side = 1,at =N_1_list,
+             labels=N_1_list,lwd.ticks = TRUE)
+        lines(N_1_list, MSE_result_pooled, lty = 2,
+              type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
+        lines(N_1_list, MSE_result_ODAL, lty = 3,
+              type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+        legend(6000, max(MSE_result_local), legend = c("Local", "Pooled", "ODAL"),
+               lwd=2, lty = c(1,2,3), col=c(rgb(26/255,133/255,172/255,0.5),
+                                            rgb(26/255,133/255,0/255,0.5),
+                                            rgb(255/255,101/255,80/255,0.5)),
+               pch=c(15, 17, 19), bty = "n")
+      }
       ##### ------------------------------------ #####
 
     } else if (setting == "B")
@@ -385,16 +392,18 @@ extODAL_homo <- function(Nsim, setting,
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
       return(result)
 
-      # plot(K_1_list, MSE_result_local,
-      #      type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-      #      xlab="Total number of sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
-      #      xaxt='n', main = "Replication B: fixed site size, increasing site number")
-      # axis(side = 1,at =K_1_list,
-      #      labels=K_1_list,lwd.ticks = TRUE)
-      # lines(K_1_list, MSE_result_pooled, lty = 2,
-      #       type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
-      # lines(K_1_list, MSE_result_ODAL, lty = 3,
-      #       type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+      if (plotit){
+        plot(K_1_list, MSE_result_local,
+             type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
+             xlab="Total number of sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
+             xaxt='n', main = "Replication B: fixed site size, increasing site number")
+        axis(side = 1,at =K_1_list,
+             labels=K_1_list,lwd.ticks = TRUE)
+        lines(K_1_list, MSE_result_pooled, lty = 2,
+              type="b", col=rgb(26/255,133/255,0/255,0.5), lwd=2, pch=17)
+        lines(K_1_list, MSE_result_ODAL, lty = 3,
+              type="b", col=rgb(255/255,101/255,80/255,0.5), lwd=2, pch=19)
+      }
       ##### ------------------------------------ #####
 
 
