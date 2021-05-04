@@ -8,6 +8,7 @@
 #' @importFrom stats binomial glm optim rbinom rnorm runif
 #' @importFrom grDevices rgb
 #' @importFrom graphics axis legend lines
+#' @export
 ODAL_hetero <-function(Data, beta_true){
 
   N = dim(Data)[1]

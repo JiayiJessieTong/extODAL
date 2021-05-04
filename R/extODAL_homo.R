@@ -1,7 +1,7 @@
 #' @title Run extODAL simulation -- homogeneous (i.e., replication of ODAL)
 #'
 #' @param Nsim total number of iterations
-#' @param setting setting of the simulation
+#' @param setting setting of the simulation, ("A" or "B")
 #' @param parallel_run if the simulation run in parallel
 #'
 #' @return MSE of three methods (Pooled, local, and ODAL)
@@ -9,6 +9,7 @@
 #' @importFrom stats binomial glm optim rbinom rnorm runif
 #' @importFrom grDevices rgb
 #' @importFrom graphics axis legend lines
+#' @export
 
 extODAL_homo <- function(Nsim, setting,
                          parallel_run = FALSE){

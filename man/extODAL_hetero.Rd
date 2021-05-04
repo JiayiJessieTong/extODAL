@@ -9,7 +9,7 @@ extODAL_hetero(Nsim, setting, parallel_run = FALSE)
 \arguments{
 \item{Nsim}{total number of iterations}
 
-\item{setting}{setting of the simulation}
+\item{setting}{setting of the extended ODAL simulation, ("1" or "2")}
 
 \item{parallel_run}{if the simulation run in parallel}
 }

@@ -10,6 +10,7 @@
 #' @importFrom stats binomial glm optim rbinom rnorm runif
 #' @importFrom grDevices rgb
 #' @importFrom graphics axis legend lines
+#' @export
 data_generator <-  function(N,beta,K,n)
 {
   ######### Function 1: expit ########

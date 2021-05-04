@@ -9,7 +9,7 @@ extODAL_homo(Nsim, setting, parallel_run = FALSE)
 \arguments{
 \item{Nsim}{total number of iterations}
 
-\item{setting}{setting of the simulation}
+\item{setting}{setting of the simulation, ("A" or "B")}
 
 \item{parallel_run}{if the simulation run in parallel}
 }
