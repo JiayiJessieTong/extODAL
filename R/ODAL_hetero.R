@@ -6,6 +6,8 @@
 #' @return Bias of pooled, ODAL, and local estimators
 #' @import matlib parallel survival
 #' @importFrom stats binomial glm optim rbinom rnorm runif
+#' @importFrom grDevices rgb
+#' @importFrom graphics axis legend lines
 ODAL_hetero <-function(Data, beta_true){
 
   N = dim(Data)[1]
