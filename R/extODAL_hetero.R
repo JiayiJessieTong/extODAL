@@ -1,6 +1,6 @@
 #' @title Run extODAL simulation -- homogeneous (i.e., replication of ODAL)
 #'
-#' @param Nsim total number of iterations
+#' @param Nsim an integer, total number of iterations
 #' @param setting setting of the extended ODAL simulation, ("1" or "2")
 #' @param parallel_run if the simulation run in parallel (default is "FALSE")
 #' @param plotit if a plot will be made (default is "FALSE")
