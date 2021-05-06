@@ -661,7 +661,8 @@ extODAL_hetero <- function(Nsim, setting,
       if (plotit){
         plot(N_1_list, Bias_result_local,
              type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-             xlab="Total number of patients across 10 sites", ylab="Mean Bias of four covariates", ylim = c(0, max(Bias_result_pooled)),
+             xlab="Total number of patients across 10 sites", ylab="Mean Bias of four covariates",
+             ylim = c(0, max(Bias_result_ODAL)),
              xaxt='n', main = "Extension B: heterogenous prevalence across fixed K sites")
         axis(side = 1,at =N_1_list,
              labels=N_1_list,lwd.ticks = TRUE)
