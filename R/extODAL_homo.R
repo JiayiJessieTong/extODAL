@@ -271,7 +271,7 @@ extODAL_homo <- function(Nsim, setting,
       if (plotit){
         plot(K_1_list, MSE_result_local,
              type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-             xlab="Total number of sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
+             xlab="Total number of sites", ylab="Mean MSE of four covariates", ylim = c(0, max(MSE_result_local)),
              xaxt='n', main = "Replication B: fixed site size, increasing site number")
         axis(side = 1,at =K_1_list,
              labels=K_1_list,lwd.ticks = TRUE)
@@ -455,7 +455,7 @@ extODAL_homo <- function(Nsim, setting,
       if (plotit){
         plot(K_1_list, MSE_result_local,
              type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-             xlab="Total number of sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
+             xlab="Total number of sites", ylab="Mean MSE of four covariates", ylim = c(0, max(MSE_result_local)),
              xaxt='n', main = "Replication B: fixed site size, increasing site number")
         axis(side = 1,at =K_1_list,
              labels=K_1_list,lwd.ticks = TRUE)

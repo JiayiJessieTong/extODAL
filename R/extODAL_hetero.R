@@ -404,7 +404,7 @@ extODAL_hetero <- function(Nsim, setting,
         order_index = order(N_1_list)
         plot(N_1_list[order_index], MSE_result_local[order_index],
              type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-             xlab="Total number of patients across 10 sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
+             xlab="Total number of patients across 10 sites", ylab="Mean MSE of four covariates", ylim = c(0, max(MSE_result_local)),
              xaxt='n', main = "Extension 1: 10 sites with different sizes")
         axis(side = 1,at =N_1_list[order_index],
              labels=N_1_list[order_index],lwd.ticks = TRUE)
@@ -463,7 +463,7 @@ extODAL_hetero <- function(Nsim, setting,
       if (plotit){
         plot(N_1_list, Bias_result_local,
              type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-             xlab="Total number of patients across 10 sites", ylab="Bias", ylim = c(0, max(Bias_result_pooled)),
+             xlab="Total number of patients across 10 sites", ylab="Mean Bias of four covariates", ylim = c(0, max(Bias_result_pooled)),
              xaxt='n', main = "Extension B: heterogenous prevalence across fixed K sites")
         axis(side = 1,at =N_1_list,
              labels=N_1_list,lwd.ticks = TRUE)
@@ -565,7 +565,7 @@ extODAL_hetero <- function(Nsim, setting,
         order_index = order(N_1_list)
         plot(N_1_list[order_index], MSE_result_local[order_index],
              type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-             xlab="Total number of patients across 10 sites", ylab="MSE", ylim = c(0, max(MSE_result_local)),
+             xlab="Total number of patients across 10 sites", ylab="Mean MSE of four covariates", ylim = c(0, max(MSE_result_local)),
              xaxt='n', main = "Extension 1: 10 sites with different sizes")
         axis(side = 1,at =N_1_list[order_index],
              labels=N_1_list[order_index],lwd.ticks = TRUE)
@@ -661,7 +661,7 @@ extODAL_hetero <- function(Nsim, setting,
       if (plotit){
         plot(N_1_list, Bias_result_local,
              type="b", col=rgb(26/255,133/255,172/255,0.5), lwd=2, pch=15, lty = 1,
-             xlab="Total number of patients across 10 sites", ylab="Bias", ylim = c(0, max(Bias_result_pooled)),
+             xlab="Total number of patients across 10 sites", ylab="Mean Bias of four covariates", ylim = c(0, max(Bias_result_pooled)),
              xaxt='n', main = "Extension B: heterogenous prevalence across fixed K sites")
         axis(side = 1,at =N_1_list,
              labels=N_1_list,lwd.ticks = TRUE)
