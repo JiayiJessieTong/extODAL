@@ -356,10 +356,6 @@ extODAL_homo <- function(Nsim, setting,
           MSE_result_ODAL[i] = MSE_result_ODAL[i] + mean(out[[iter]][[i]]$MSE_ODAL)
         }
       }
-      MSE_result_pooled = MSE_result_pooled/Nsim
-      MSE_result_local = MSE_result_local/Nsim
-      MSE_result_ODAL = MSE_result_ODAL/Nsim
-
 
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
 
@@ -452,9 +448,6 @@ extODAL_homo <- function(Nsim, setting,
           MSE_result_ODAL[i] = MSE_result_ODAL[i] + mean(out[[iter]][[i]]$MSE_ODAL)
         }
       }
-      MSE_result_pooled = MSE_result_pooled/Nsim
-      MSE_result_local = MSE_result_local/Nsim
-      MSE_result_ODAL = MSE_result_ODAL/Nsim
 
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
 

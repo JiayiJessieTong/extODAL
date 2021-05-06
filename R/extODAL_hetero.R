@@ -558,9 +558,6 @@ extODAL_hetero <- function(Nsim, setting,
           MSE_result_ODAL[i] = MSE_result_ODAL[i] + mean(out[[iter]][[i]]$MSE_ODAL)
         }
       }
-      MSE_result_pooled = MSE_result_pooled/Nsim
-      MSE_result_local = MSE_result_local/Nsim
-      MSE_result_ODAL = MSE_result_ODAL/Nsim
 
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
 
@@ -655,10 +652,6 @@ extODAL_hetero <- function(Nsim, setting,
           Bias_result_ODAL[i] =  Bias_result_ODAL[i] + mean(out[[iter]][[i]]$bias_ODAL)
         }
       }
-      Bias_result_pooled = Bias_result_pooled/Nsim
-      Bias_result_clogit = Bias_result_clogit/Nsim
-      Bias_result_local = Bias_result_local/Nsim
-      Bias_result_ODAL = Bias_result_ODAL/Nsim
 
 
       result = as.data.frame(rbind(Bias_result_pooled, Bias_result_clogit,
