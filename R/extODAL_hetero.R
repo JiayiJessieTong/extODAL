@@ -520,26 +520,47 @@ extODAL_hetero <- function(Nsim, setting,
         N_n_list[[i]] = list(N_1_list[i], n_1_list[i,])
       }
       if (Sys.info()[1] == "Windows"){
+
+        run_once <- function(input = NULL){
+          cl = makeCluster(detectCores()/2)
+          out = parLapply(cl, N_n_list,
+                          main_run_once_parallel_1,
+                          beta_true = beta_true,
+                          K = K_1)
+          stopCluster(cl)
+        }
+
         cl = makeCluster(detectCores()/2)
-        out = parLapply(cl, N_n_list,
-                        main_run_once_parallel_1,
-                        beta_true = beta_true,
-                        K = K_1)
+        out = parLapply(cl, 1:Nsim, run_once)
         stopCluster(cl)
+
       } else {
-      out = mclapply(N_n_list,
-                     main_run_once_parallel_1,
-                     beta_true = beta_true,
-                     K = K_1,
-                     mc.cores = detectCores()/2)
+
+        run_once <- function(input = NULL){
+          out = mclapply(N_n_list,
+                         main_run_once_parallel_1,
+                         beta_true = beta_true,
+                         K = K_1,
+                         mc.cores = detectCores()/2)
+
+          return(out)
+        }
+
+        out = mclapply(1:Nsim, run_once, mc.cores = detectCores()/2)
+
       }
 
       MSE_result_pooled = MSE_result_local = MSE_result_ODAL = rep(0, length(N_1_list))
       for (i in 1:length(N_1_list)){
-        MSE_result_pooled[i] = mean(out[[i]]$MSE_pooled)
-        MSE_result_local[i] = mean(out[[i]]$MSE_local)
-        MSE_result_ODAL[i] = mean(out[[i]]$MSE_ODAL)
+        for (iter in Nsim){
+          MSE_result_pooled[i] = MSE_result_pooled[i] + mean(out[[iter]][[i]]$MSE_pooled)
+          MSE_result_local[i] = MSE_result_local[i] + mean(out[[iter]][[i]]$MSE_local)
+          MSE_result_ODAL[i] = MSE_result_ODAL[i] + mean(out[[iter]][[i]]$MSE_ODAL)
+        }
       }
+      MSE_result_pooled = MSE_result_pooled/Nsim
+      MSE_result_local = MSE_result_local/Nsim
+      MSE_result_ODAL = MSE_result_ODAL/Nsim
 
       result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
 
@@ -589,28 +610,56 @@ extODAL_hetero <- function(Nsim, setting,
       for (i in 1:length(N_1_list)){
         N_n_list[[i]] = list(N_1_list[i], n_1_list[i])
       }
+
       if (Sys.info()[1] == "Windows"){
+
+        run_once <- function(input = NULL){
+          cl = makeCluster(detectCores()/2)
+          out = parLapply(cl, N_n_list,
+                          main_run_once_parallel_2,
+                          beta_true = beta_true,
+                          K = K_1)
+          stopCluster(cl)
+        }
+
         cl = makeCluster(detectCores()/2)
-        out = parLapply(cl, N_n_list,
-                        main_run_once_parallel_2,
-                        beta_true = beta_true,
-                        K = K_1)
+        out = parLapply(cl, 1:Nsim, run_once)
         stopCluster(cl)
+
       } else {
-      out = mclapply(N_n_list,
-                     main_run_once_parallel_2,
-                     beta_true = beta_true,
-                     K = K_1,
-                     mc.cores = detectCores()/2)
+
+        run_once <- function(input = NULL){
+          out = mclapply(N_n_list,
+                         main_run_once_parallel_2,
+                         beta_true = beta_true,
+                         K = K_1,
+                         mc.cores = detectCores()/2)
+
+          return(out)
+        }
+
+        out = mclapply(1:Nsim, run_once, mc.cores = detectCores()/2)
+
       }
 
       Bias_result_pooled = Bias_result_clogit  = Bias_result_local = Bias_result_ODAL = rep(0, length(N_1_list))
       for (i in 1:length(N_1_list)){
-        Bias_result_pooled[i] = mean(out[[i]]$bias_pooled)
-        Bias_result_clogit[i] = mean(out[[i]]$bias_clogit)
-        Bias_result_local[i] = mean(out[[i]]$bias_local)
-        Bias_result_ODAL[i] = mean(out[[i]]$bias_ODAL)
+        for (iter in Nsim){
+          MSE_result_pooled[i] = MSE_result_pooled[i] + mean(out[[iter]][[i]]$MSE_pooled)
+          MSE_result_local[i] = MSE_result_local[i] + mean(out[[iter]][[i]]$MSE_local)
+          MSE_result_ODAL[i] = MSE_result_ODAL[i] + mean(out[[iter]][[i]]$MSE_ODAL)
+
+          Bias_result_pooled[i] = Bias_result_pooled[i] + mean(out[[iter]][[i]]$bias_pooled)
+          Bias_result_clogit[i] = Bias_result_clogit[i] + mean(out[[iter]][[i]]$bias_clogit)
+          Bias_result_local[i] = Bias_result_local[i] + mean(out[[iter]][[i]]$bias_local)
+          Bias_result_ODAL[i] =  Bias_result_ODAL[i] + mean(out[[iter]][[i]]$bias_ODAL)
+        }
       }
+      Bias_result_pooled = Bias_result_pooled/Nsim
+      Bias_result_clogit = Bias_result_clogit/Nsim
+      Bias_result_local = Bias_result_local/Nsim
+      Bias_result_ODAL = Bias_result_ODAL/Nsim
+
 
       result = as.data.frame(rbind(Bias_result_pooled, Bias_result_clogit,
                                    Bias_result_local, Bias_result_ODAL))
