@@ -4,7 +4,7 @@
 \alias{extODAL_homo}
 \title{Run extODAL simulation -- homogeneous (i.e., replication of ODAL)}
 \usage{
-extODAL_homo(Nsim, setting, parallel_run = FALSE, plotit = FALSE)
+extODAL_homo(Nsim, setting, parallel_run = FALSE, plotit = TRUE)
 }
 \arguments{
 \item{Nsim}{an integer, total number of iterations}
@@ -13,7 +13,7 @@ extODAL_homo(Nsim, setting, parallel_run = FALSE, plotit = FALSE)
 
 \item{parallel_run}{if the simulation run in parallel (default is "FALSE")}
 
-\item{plotit}{if a plot will be made (default is "FALSE")}
+\item{plotit}{if a plot will be made (default is "TRUE")}
 }
 \value{
 MSE of three methods (Pooled, local, and ODAL)
