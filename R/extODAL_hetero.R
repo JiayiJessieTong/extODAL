@@ -609,9 +609,10 @@ extODAL_hetero <- function(Nsim, setting,
       }
 
       if (Sys.info()[1] == "Windows"){
-
+        RNGkind("L'Ecuyer-CMRG")
         run_once <- function(input = NULL){
           cl = makeCluster(detectCores()/2)
+          clusterSetRNGStream(cl, iseed=4321)
           out = parLapply(cl, N_n_list,
                           main_run_once_parallel_2,
                           beta_true = beta_true,
