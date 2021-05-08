@@ -11,10 +11,13 @@
 #' @importFrom grDevices rgb
 #' @importFrom graphics axis legend lines
 #' @export
+#'
+
 
 extODAL_hetero <- function(Nsim, setting,
                            parallel_run = FALSE,
                            plotit = TRUE){
+
   set.seed(4321)
   beta_true = c(-1,1,-1,1,-1)
 
@@ -161,6 +164,7 @@ extODAL_hetero <- function(Nsim, setting,
       {
 
         main_run_once_parallel_1 <- function(N_n_list, beta_true, K){
+
           tryCatch(
             {# generate data
               data = data_generator(N_n_list[[1]], beta_true, K, N_n_list[[2]])
@@ -170,7 +174,7 @@ extODAL_hetero <- function(Nsim, setting,
 
               return(out)
             },error=function(e){
-              cat("ERROR :",conditionMessage(e), "\n")
+              print(paste("ERROR :",conditionMessage(e), "\n"))
             })
         }
         ### -------------- Extension 1 -------------- ###
@@ -187,46 +191,28 @@ extODAL_hetero <- function(Nsim, setting,
         for (i in 1:length(N_1_list)){
           N_n_list[[i]] = list(N_1_list[i], n_1_list[i,])
         }
-        if (Sys.info()[1] == "Windows"){
-          run_once <- function(input = NULL){
-            cl = makeCluster(detectCores()/2)
-            out = parLapply(cl, N_n_list,
-                            main_run_once_parallel_1,
-                            beta_true = beta_true,
-                            K = K_1)
-            stopCluster(cl)
-          }
 
-          cl = makeCluster(detectCores()/2)
-          out = parLapply(cl, 1:Nsim, run_once)
-          stopCluster(cl)
 
-        } else {
+        cat("Using parLapply to run in parallel")
+        cl = makeCluster(detectCores()/2)
+        out = parLapply(cl, rep(N_n_list, Nsim), main_run_once_parallel_1,
+                        beta_true = beta_true,
+                        K = K_1)
+        stopCluster(cl)
 
-          run_once <- function(input = NULL){
-            out = mclapply(N_n_list,
-                           main_run_once_parallel_1,
-                           beta_true = beta_true,
-                           K = K_1,
-                           mc.cores = detectCores()/2)
-
-            return(out)
-          }
-
-          out = mclapply(1:Nsim, run_once, mc.cores = detectCores()/2)
-
-        }
 
         MSE_result_pooled = MSE_result_local = MSE_result_ODAL = rep(0, length(N_1_list))
         for (i in 1:length(N_1_list)){
           for (iter in Nsim){
-            MSE_result_pooled[i] = MSE_result_pooled[i] + mean(out[[iter]][[i]]$MSE_pooled)
-            MSE_result_local[i] = MSE_result_local[i] + mean(out[[iter]][[i]]$MSE_local)
-            MSE_result_ODAL[i] = MSE_result_ODAL[i] + mean(out[[iter]][[i]]$MSE_ODAL)
+            MSE_result_pooled[i] = MSE_result_pooled[i] + out[[(iter-1) * length(N_1_list) + i]]$MSE_pooled/Nsim
+            MSE_result_local[i] = MSE_result_local[i] + out[[(iter-1) * length(N_1_list) + i]]$MSE_local/Nsim
+            MSE_result_ODAL[i] = MSE_result_ODAL[i] + out[[(iter-1) * length(N_1_list) + i]]$MSE_ODAL/Nsim
           }
         }
 
         result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
+
+        print(result)
 
         if (plotit){
           order_index = order(N_1_list)

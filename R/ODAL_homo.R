@@ -141,8 +141,8 @@ ODAL_homo <-function(Data, beta_true){
   MSE_ODAL = bias_ODAL + var_ODAL
 
 
-  return(list(MSE_pooled = MSE_pooled,
-              MSE_local = MSE_local,
-              MSE_ODAL = MSE_ODAL))
+  return(list(MSE_pooled = mean(MSE_pooled),
+              MSE_local = mean(MSE_local),
+              MSE_ODAL = mean(MSE_ODAL)))
 }
 ##### ------------------------------------ #####
