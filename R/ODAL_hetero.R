@@ -3,7 +3,7 @@
 #' @param Data heterogeneous data
 #' @param beta_true true value of coefficients
 #'
-#' @return Bias of pooled, ODAL, and local estimators
+#' @return mean MSE/bias of pooled, ODAL, local, and clogit estimators
 #' @import matlib parallel survival
 #' @importFrom stats binomial glm optim rbinom rnorm runif
 #' @importFrom grDevices rgb

@@ -5,7 +5,7 @@
 #' @param parallel_run if the simulation run in parallel (default is "FALSE")
 #' @param plotit if a plot will be made (default is "TRUE")
 #'
-#' @return MSE of three methods (Pooled, local, and ODAL)
+#' @return mean MSEs of covariates for three methods (Pooled, local, and ODAL)
 #' @import matlib parallel survival
 #' @importFrom stats binomial glm optim rbinom rnorm runif
 #' @importFrom grDevices rgb

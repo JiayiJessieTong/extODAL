@@ -12,7 +12,7 @@ ODAL_homo(Data, beta_true)
 \item{beta_true}{true value of coefficients}
 }
 \value{
-MSE of pooled, ODAL, and local estimators
+mean MSE of pooled, ODAL, and local estimators
 }
 \description{
 replication of ODAL

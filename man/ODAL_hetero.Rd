@@ -12,7 +12,7 @@ ODAL_hetero(Data, beta_true)
 \item{beta_true}{true value of coefficients}
 }
 \value{
-Bias of pooled, ODAL, and local estimators
+mean MSE/bias of pooled, ODAL, local, and clogit estimators
 }
 \description{
 extension of ODAL -- heterogeneity

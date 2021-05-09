@@ -16,7 +16,7 @@ extODAL_homo(Nsim, setting, parallel_run = FALSE, plotit = TRUE)
 \item{plotit}{if a plot will be made (default is "TRUE")}
 }
 \value{
-MSE of three methods (Pooled, local, and ODAL)
+mean MSEs of covariates for three methods (Pooled, local, and ODAL)
 }
 \description{
 Run extODAL simulation -- homogeneous (i.e., replication of ODAL)

@@ -3,7 +3,7 @@
 #' @param Data homogeneous data
 #' @param beta_true true value of coefficients
 #'
-#' @return MSE of pooled, ODAL, and local estimators
+#' @return mean MSE of pooled, ODAL, and local estimators
 #' @import matlib parallel survival
 #' @importFrom stats binomial glm optim rbinom rnorm runif
 #' @importFrom grDevices rgb
