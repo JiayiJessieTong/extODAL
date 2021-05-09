@@ -59,9 +59,9 @@ extODAL_homo <- function(Nsim, setting,
                                                K = K_1,
                                                n = n_1_list[i]))
           # result for Nsim iteration
-          MSE_result_pooled[i] = mean(apply(matrix(unlist(result_all[1,]), ncol = 5, nrow = Nsim), 2, mean))
-          MSE_result_local[i] = mean(apply(matrix(unlist(result_all[2,]), ncol = 5, nrow = Nsim), 2, mean))
-          MSE_result_ODAL[i] = mean(apply(matrix(unlist(result_all[3,]), ncol = 5, nrow = Nsim), 2, mean))
+          MSE_result_pooled[i] = mean(unlist(result_all[1,]))
+          MSE_result_local[i] = mean(unlist(result_all[2,]))
+          MSE_result_ODAL[i] = mean(unlist(result_all[3,]))
         }
 
         result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
@@ -106,9 +106,9 @@ extODAL_homo <- function(Nsim, setting,
                                                K = K_1_list[i],
                                                n = n_1))
           # result for Nsim iteration
-          MSE_result_pooled[i] = mean(apply(matrix(unlist(result_all[1,]), ncol = 5, nrow = Nsim), 2, mean))
-          MSE_result_local[i] = mean(apply(matrix(unlist(result_all[2,]), ncol = 5, nrow = Nsim), 2, mean))
-          MSE_result_ODAL[i] = mean(apply(matrix(unlist(result_all[3,]), ncol = 5, nrow = Nsim), 2, mean))
+          MSE_result_pooled[i] = mean(unlist(result_all[1,]))
+          MSE_result_local[i] = mean(unlist(result_all[2,]))
+          MSE_result_ODAL[i] = mean(unlist(result_all[3,]))
         }
         result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
 
@@ -162,47 +162,25 @@ extODAL_homo <- function(Nsim, setting,
         }
 
 
-        if (Sys.info()[1] == "Windows"){
+        cat("Using parLapply to run in parallel -- Setting A")
+        cl = makeCluster(detectCores()/2)
+        out = parLapply(cl, rep(N_n_list, Nsim), main_run_once_parallel_A,
+                        beta_true = beta_true,
+                        K = K_1)
+        stopCluster(cl)
 
-          run_once <- function(input = NULL){
-            cl = makeCluster(detectCores()/2)
-            out = parLapply(cl, N_n_list,
-                            main_run_once_parallel_A,
-                            beta_true = beta_true,
-                            K = K_1)
-            stopCluster(cl)
-          }
-
-          cl = makeCluster(detectCores()/2)
-          out = parLapply(cl, 1:Nsim, run_once)
-          stopCluster(cl)
-
-        } else {
-
-          run_once <- function(input = NULL){
-            out = mclapply(N_n_list,
-                           main_run_once_parallel_A,
-                           beta_true = beta_true,
-                           K = K_1,
-                           mc.cores = detectCores()/2)
-
-            return(out)
-          }
-
-          out = mclapply(1:Nsim, run_once, mc.cores = detectCores()/2)
-
-        }
 
         MSE_result_pooled = MSE_result_local = MSE_result_ODAL = rep(0, length(N_1_list))
         for (i in 1:length(N_1_list)){
           for (iter in Nsim){
-            MSE_result_pooled[i] = MSE_result_pooled[i] + mean(out[[iter]][[i]]$MSE_pooled)
-            MSE_result_local[i] = MSE_result_local[i] + mean(out[[iter]][[i]]$MSE_local)
-            MSE_result_ODAL[i] = MSE_result_ODAL[i] + mean(out[[iter]][[i]]$MSE_ODAL)
+            MSE_result_pooled[i] = MSE_result_pooled[i] + out[[(iter-1) * length(N_1_list) + i]]$MSE_pooled/Nsim
+            MSE_result_local[i] = MSE_result_local[i] + out[[(iter-1) * length(N_1_list) + i]]$MSE_local/Nsim
+            MSE_result_ODAL[i] = MSE_result_ODAL[i] + out[[(iter-1) * length(N_1_list) + i]]$MSE_ODAL/Nsim
           }
         }
 
         result = as.data.frame(rbind(MSE_result_pooled, MSE_result_local, MSE_result_ODAL))
+
 
 
         if (plotit){
@@ -254,43 +232,20 @@ extODAL_homo <- function(Nsim, setting,
           N_K_list[[i]] = list(N_1_list[i], K_1_list[i])
         }
 
-        if (Sys.info()[1] == "Windows"){
+        cat("Using parLapply to run in parallel -- Setting B")
+        cl = makeCluster(detectCores()/2)
+        out = parLapply(cl, rep(N_K_list, Nsim), main_run_once_parallel_B,
+                        beta_true = beta_true,
+                        n = n_1)
+        stopCluster(cl)
 
-          run_once <- function(input = NULL){
-            cl = makeCluster(detectCores()/2)
-            out = parLapply(cl, N_K_list,
-                            main_run_once_parallel_B,
-                            beta_true = beta_true,
-                            n = n_1)
-            stopCluster(cl)
-          }
-
-          cl = makeCluster(detectCores()/2)
-          out = parLapply(cl, 1:Nsim, run_once)
-          stopCluster(cl)
-
-        } else {
-
-          run_once <- function(input = NULL){
-            out = mclapply(N_K_list,
-                           main_run_once_parallel_B,
-                           beta_true = beta_true,
-                           n = n_1,
-                           mc.cores = detectCores()/2)
-
-            return(out)
-          }
-
-          out = mclapply(1:Nsim, run_once, mc.cores = detectCores()/2)
-
-        }
 
         MSE_result_pooled = MSE_result_local = MSE_result_ODAL = rep(0, length(N_1_list))
         for (i in 1:length(N_1_list)){
           for (iter in Nsim){
-            MSE_result_pooled[i] = MSE_result_pooled[i] + mean(out[[iter]][[i]]$MSE_pooled)
-            MSE_result_local[i] = MSE_result_local[i] + mean(out[[iter]][[i]]$MSE_local)
-            MSE_result_ODAL[i] = MSE_result_ODAL[i] + mean(out[[iter]][[i]]$MSE_ODAL)
+            MSE_result_pooled[i] = MSE_result_pooled[i] + out[[(iter-1) * length(N_1_list) + i]]$MSE_pooled/Nsim
+            MSE_result_local[i] = MSE_result_local[i] + out[[(iter-1) * length(N_1_list) + i]]$MSE_local/Nsim
+            MSE_result_ODAL[i] = MSE_result_ODAL[i] + out[[(iter-1) * length(N_1_list) + i]]$MSE_ODAL/Nsim
           }
         }
 

@@ -150,9 +150,9 @@ ODAL_hetero <-function(Data, beta_true){
   # MSE_ODAL = bias_ODAL + var_ODAL
 
 
-  return(list(bias_pooled = bias_pooled,
-              bias_clogit = bias_clogit,
-              bias_local = bias_local,
-              bias_ODAL = bias_ODAL))
+  return(list(bias_pooled = mean(bias_pooled),
+              bias_clogit = mean(bias_clogit),
+              bias_local = mean(bias_local),
+              bias_ODAL = mean(bias_ODAL)))
 }
 ##### ------------------------------------ #####
